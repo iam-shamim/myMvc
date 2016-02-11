@@ -11,4 +11,8 @@ class Users extends Controller{
     public function editShow($id){
         return view('userEditForm',user::find($id));
     }
+    public function addForm(){
+        return view('userAddForm');
+    }
+
 }

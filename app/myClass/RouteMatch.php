@@ -43,12 +43,14 @@ class RouteMatch{
                     $routeReturnVal=Route::routeParam()->$ActionMethod[$val];
                     if(is_scalar($routeReturnVal)){
                         $expReturnVal=explode('@',$routeReturnVal);
-                        //include 'app/controllers/'.$expReturnVal[0].'.php';
                         $controllerName=$expReturnVal[0];
                         $controller=\app\controllers\ControllerFactory::create($controllerName);
                         $method=$expReturnVal[1];
                         call_user_func_array([$controller,$method],$methodValue);
                     }else if(is_callable($routeReturnVal)){
+                        if(!isset($methodValue)){
+                            $methodValue=[];
+                        }
                         echo call_user_func_array($routeReturnVal,$methodValue);
                         //echo $routeReturnVal();
                     }

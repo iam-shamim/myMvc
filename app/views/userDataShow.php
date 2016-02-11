@@ -1,6 +1,6 @@
 <?php
 $sendData=[];
-$sendData['title']="Nurun Nobi Shamim";
+$sendData['title']="Show ALl Data";
 inc('inc/header',$sendData);
 $data='';
 $sl=0;
@@ -27,10 +27,16 @@ foreach($dataAll as $row){
 }
 ?>
 <div class="container">
-    <div class="col-xs-12">
-        <div class="table">
-            <table class="table table-bordered">
-                <thead>
+    <br>
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="<?php echo URL.'/userAdd' ?>" class="btn btn-info pull-right">
+                <span class="glyphicon glyphicon-plus"></span>
+                Add New
+            </a>
+            <div class="table">
+                <table class="table table-bordered">
+                    <thead>
                     <tr>
                         <td>S/L</td>
                         <td>Full Name</td>
@@ -39,11 +45,12 @@ foreach($dataAll as $row){
                         <td width="5%">Edit</td>
                         <td width="5%">Delete</td>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     <?php echo $data; ?>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
