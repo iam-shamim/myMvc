@@ -42,6 +42,29 @@ class RouteMatch{
                 if($matchStatus){
                     $ActionMethod=ActionMethod;
                     $routeReturnVal=Route::routeParam()->$ActionMethod[$val];
+
+                    $routeValidationArr=(isset(route::$validation[$ActionMethod][$routeKey]))?route::$validation[$ActionMethod][$routeKey]:null;
+                    foreach($methodValue as $key=>$val){
+                        if(is_array($routeValidationArr)){
+                            $current=current($routeValidationArr);
+                            next($routeValidationArr);
+                            $pattern='/'.$current.'/';
+                            preg_match($pattern,$val,$matchedVal);
+                            if(strlen($matchedVal[0])!==strlen($val)){
+                                $returnStatus=false;
+                                goto GoToNext;
+                            }
+                        }else{
+                            $current=$routeValidationArr;
+                            $pattern='/'.$current.'/';
+                            preg_match($pattern,$methodValue[0],$matchedVal);
+                            if(strlen($matchedVal[0])!==strlen($methodValue[0])){
+                                $returnStatus=false;
+                                goto GoToNext;
+                            }
+                        }
+                    }
+
                     if(is_scalar($routeReturnVal)){
                         $expReturnVal=explode('@',$routeReturnVal);
                         $controllerName=$expReturnVal[0];
@@ -64,19 +87,7 @@ class RouteMatch{
         } // foreach 1 end
         GoToNext:
         if($returnStatus){
-                $routeValidationArr=(isset(route::$validation[$ActionMethod][$routeKey]))?route::$validation[$ActionMethod][$routeKey]:null;
 
-            foreach($methodValue as $key=>$val){
-                if(is_array($routeValidationArr)){
-                    $current=current($routeValidationArr);
-                    next($routeValidationArr);
-                    $pattern='/'.$current.'/';
-                    preg_match($pattern,$val,$matchedVal);
-                    if(strlen($matchedVal[0])!==strlen($val)){
-                        return false;
-                    }
-                }
-            }
             return true;
         }else{
             return false;

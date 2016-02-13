@@ -7,7 +7,7 @@ Route::get('/',function(){
     return 'Home Page';
 });
 Route::get('/user','Users@show');
-Route::get('/about/{id}/you','About@You');
+Route::get('/about/{id}/you','About@you')->where('id','[0-9]+');
 Route::get('posts/{post}/comments/{comment}','Users@show');
 Route::get('/about/{id}/he',function(){
     return 'Hello.';
