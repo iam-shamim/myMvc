@@ -1,6 +1,6 @@
 <?php
 $sendData=[];
-$sendData['title']="Show ALl Data";
+$sendData['title']="Show All Data";
 inc('inc/header',$sendData);
 $data='';
 $sl=0;
@@ -13,12 +13,12 @@ foreach($dataAll as $row){
             <td>{$row->email}</td>
             <td>{$row->user}</td>
             <td>
-                <a href='userEdit/{$row->id}' class='btn btn-info'>
+                <a href='".url('user/edit')."/{$row->id}' class='btn btn-info'>
                     <span class='glyphicon glyphicon-pencil'></span>
                 </a>
             </td>
             <td>
-                <a href='delete/' class='btn btn-danger'>
+                <a href='".url('user/delete')."/{$row->id}'  class='btn btn-danger'>
                     <span class='glyphicon glyphicon-trash'></span>
                 </a>
             </td>
@@ -30,7 +30,7 @@ foreach($dataAll as $row){
     <br>
     <div class="row">
         <div class="col-xs-12">
-            <a href="<?php echo URL.'/userAdd' ?>" class="btn btn-info pull-right">
+            <a href="<?php url_e('user/userAdd'); ?>" class="btn btn-info pull-right">
                 <span class="glyphicon glyphicon-plus"></span>
                 Add New
             </a>

@@ -13,7 +13,8 @@ class RouteMatch{
             $route=[''];
         }
         $cRouteArray=explode('/',cRoute);
-        foreach($route as $val){    // foreach 1 starts
+        foreach($route as $routeKey=>$val){    // foreach 1 starts
+            $routeKey=$routeKey;
             if(empty(trim(cRoute,'/')) AND $val==='defaultApplicationRouteHomePage'){
                 $matchStatus=true;
                 goto GoToMatchStatus;
@@ -63,6 +64,19 @@ class RouteMatch{
         } // foreach 1 end
         GoToNext:
         if($returnStatus){
+                $routeValidationArr=(isset(route::$validation[$ActionMethod][$routeKey]))?route::$validation[$ActionMethod][$routeKey]:null;
+
+            foreach($methodValue as $key=>$val){
+                if(is_array($routeValidationArr)){
+                    $current=current($routeValidationArr);
+                    next($routeValidationArr);
+                    $pattern='/'.$current.'/';
+                    preg_match($pattern,$val,$matchedVal);
+                    if(strlen($matchedVal[0])!==strlen($val)){
+                        return false;
+                    }
+                }
+            }
             return true;
         }else{
             return false;

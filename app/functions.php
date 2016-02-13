@@ -25,3 +25,9 @@ function inc($layoutName,$data=null){
 function fileLinkCreate($link){
     echo URL.'/public/'.$link;
 }
+function url($url){
+    return URL.'/'.$url;
+}
+function url_e($url){
+    echo URL.'/'.$url;
+}
