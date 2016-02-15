@@ -1,9 +1,10 @@
 <?php
 namespace app\myClass;
 use app\controllers;
+use app\controllers\ControllerFactory;
 class RouteMatch{
     function  __construct(){
-            self::match();
+        self::match();
     }
     public static function matchStatus(){
         $ActionMethod=ActionMethod;
@@ -13,22 +14,28 @@ class RouteMatch{
             $route=[''];
         }
         $cRouteArray=explode('/',cRoute);
+
         foreach($route as $routeKey=>$val){    // foreach 1 starts
+            $methodValue=[];
+            $optionToVal=[];
             $routeKey=$routeKey;
             if(empty(trim(cRoute,'/')) AND $val==='defaultApplicationRouteHomePage'){
                 $matchStatus=true;
                 goto GoToMatchStatus;
-
+            }
+            if(cRoute===$val){
+                $matchStatus=true;
+                goto GoToMatchStatus;
             }
             $returnStatus=false;
             $routeValExp=explode('/',$val);
-            if(count($routeValExp)===count($cRouteArray)){;
+            if(count($routeValExp)===count($cRouteArray)){
                 $matchStatus=true;
                 $sl=0;
-                $methodValue=[];
                 foreach($routeValExp as $childVal1){    // foreach 2 start
-                    if(strpos($childVal1,'{')!==false AND strpos($childVal1,'}')!==false){
+                    if(preg_match('/^{\w+}$/',$childVal1)){
                         $methodValue[]=$cRouteArray[$sl];
+                        $optionToVal[$childVal1]=$cRouteArray[$sl]; // set value to optionToVal
                         $sl++;
                         continue;
                     }else{
@@ -42,33 +49,24 @@ class RouteMatch{
                 if($matchStatus){
                     $ActionMethod=ActionMethod;
                     $routeReturnVal=Route::routeParam()->$ActionMethod[$val];
-
                     $routeValidationArr=(isset(route::$validation[$ActionMethod][$routeKey]))?route::$validation[$ActionMethod][$routeKey]:null;
-                    foreach($methodValue as $key=>$val){
-                        if(is_array($routeValidationArr)){
-                            $current=current($routeValidationArr);
-                            next($routeValidationArr);
-                            $pattern='/'.$current.'/';
-                            preg_match($pattern,$val,$matchedVal);
-                            if(strlen($matchedVal[0])!==strlen($val)){
-                                $returnStatus=false;
-                                goto GoToNext;
-                            }
-                        }else{
-                            $current=$routeValidationArr;
-                            $pattern='/'.$current.'/';
-                            preg_match($pattern,$methodValue[0],$matchedVal);
-                            if(strlen($matchedVal[0])!==strlen($methodValue[0])){
-                                $returnStatus=false;
-                                goto GoToNext;
-                            }
+
+                    foreach($routeValidationArr as $validKey=>$validVal){
+                        $textValidVal=$optionToVal['{'.$validKey.'}'];
+                        $pattern='/'.$validVal.'/';
+                        preg_match($pattern,$textValidVal,$matchedVal);
+                        $matchedValFinal=(!isset($matchedVal[0]))? null: $matchedVal[0];
+                        if(strlen($matchedValFinal)!==strlen($textValidVal)){
+                            $returnStatus=false;
+                            goto GoToNext;
                         }
+
                     }
 
                     if(is_scalar($routeReturnVal)){
                         $expReturnVal=explode('@',$routeReturnVal);
                         $controllerName=$expReturnVal[0];
-                        $controller=\app\controllers\ControllerFactory::create($controllerName);
+                        $controller=ControllerFactory::create($controllerName);
                         $method=$expReturnVal[1];
                         call_user_func_array([$controller,$method],$methodValue);
                     }else if(is_callable($routeReturnVal)){

@@ -9,8 +9,9 @@ function __autoload($className){
     $str=trim($str);
     $classPath=str_replace($str,'/',$className);
     require_once $classPath.'.php';
+
 }
 
-require_once 'route.php';
+require_once 'routes.php';
 use app\myClass\RouteMatch;
 new RouteMatch();

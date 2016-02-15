@@ -50,7 +50,7 @@ class Route{
             self::$validation[self::$urlMethod][key(self::$routeList[self::$urlMethod])]=$validator;
         }else{
             $endVal=end(self::$routeList[self::$urlMethod]);
-            self::$validation[self::$urlMethod][key(self::$routeList[self::$urlMethod])]=$validation;
+            self::$validation[self::$urlMethod][key(self::$routeList[self::$urlMethod])]=[$validator=>$validation];
         }
 
     }
