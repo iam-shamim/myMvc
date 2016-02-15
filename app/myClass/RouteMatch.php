@@ -49,8 +49,7 @@ class RouteMatch{
                 if($matchStatus){
                     $ActionMethod=ActionMethod;
                     $routeReturnVal=Route::routeParam()->$ActionMethod[$val];
-                    $routeValidationArr=(isset(route::$validation[$ActionMethod][$routeKey]))?route::$validation[$ActionMethod][$routeKey]:null;
-
+                    $routeValidationArr=(isset(route::$validation[$ActionMethod][$routeKey]))?route::$validation[$ActionMethod][$routeKey]:[];
                     foreach($routeValidationArr as $validKey=>$validVal){
                         $textValidVal=$optionToVal['{'.$validKey.'}'];
                         $pattern='/'.$validVal.'/';
