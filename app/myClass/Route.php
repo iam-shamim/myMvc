@@ -9,6 +9,7 @@ class Route{
     private static $routeParam=[];
     private static $instance=null;
     private static $urlMethod;
+    public static $routeNamed=[];
 
     //route return validation
     static  public function valid($param,$url){
@@ -37,8 +38,18 @@ class Route{
         self::urlEmptyCheck($url);
 
         self::$routeList['GET'][]=$url;
-        self::$routeParam['GET'][$url]=$return;
 
+        if(is_array($return)){
+            if(isset($return['as'])){self::$routeNamed[$return['as']]=$url;}
+            if(isset($return[0])){
+                if(is_callable($return[0])){
+                    $return=$return[0];
+                }
+            }else if(isset($return['uses'])){
+                $return=$return['uses'];
+            }
+        }
+        self::$routeParam['GET'][$url]=$return;
         self::$urlMethod='GET';
         return self::instanceCreate();
 
@@ -60,6 +71,16 @@ class Route{
         self::urlEmptyCheck($url);
 
         self::$routeList['POST'][]=$url;
+        if(is_array($return)){
+            if(isset($return['as'])){self::$routeNamed[$return['as']]=$url;}
+            if(isset($return[0])){
+                if(is_callable($return[0])){
+                    $return=$return[0];
+                }
+            }else if(isset($return['uses'])){
+                $return=$return['uses'];
+            }
+        }
         self::$routeParam['POST'][$url]=$return;
 
         self::$urlMethod='POST';
@@ -71,6 +92,16 @@ class Route{
         self::urlEmptyCheck($url);
 
         self::$routeList['PUT'][]=$url;
+        if(is_array($return)){
+            if(isset($return['as'])){self::$routeNamed[$return['as']]=$url;}
+            if(isset($return[0])){
+                if(is_callable($return[0])){
+                    $return=$return[0];
+                }
+            }else if(isset($return['uses'])){
+                $return=$return['uses'];
+            }
+        }
         self::$routeParam['PUT'][$url]=$return;
 
         self::$urlMethod='PUT';
@@ -82,6 +113,16 @@ class Route{
         self::urlEmptyCheck($url);
 
         self::$routeList['DELETE'][]=$url;
+        if(is_array($return)){
+            if(isset($return['as'])){self::$routeNamed[$return['as']]=$url;}
+            if(isset($return[0])){
+                if(is_callable($return[0])){
+                    $return=$return[0];
+                }
+            }else if(isset($return['uses'])){
+                $return=$return['uses'];
+            }
+        }
         self::$routeParam['DELETE'][$url]=$return;
 
         self::$urlMethod='DELETE';

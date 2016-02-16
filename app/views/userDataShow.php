@@ -13,7 +13,7 @@ foreach($dataAll as $row){
             <td>{$row->email}</td>
             <td>{$row->user}</td>
             <td>
-                <a href='".url('user/edit')."/{$row->id}' class='btn btn-info'>
+                <a href='".route('userEdit',['id'=>$row->id])."' class='btn btn-info'>
                     <span class='glyphicon glyphicon-pencil'></span>
                 </a>
             </td>
